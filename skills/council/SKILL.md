@@ -58,3 +58,4 @@ keep scope limited.
 ## Local notes
 
 - The members are Claude Opus, GPT 6.1 Sol and Muse Wonder Full 1.0. Muse runs only in OMP; where it has no route, report that instead of substituting another model.
+- Report the scores to the user in chat only, not in the PR description. Keep the council section, the scores and every model or tool name out of pull request descriptions, commit messages and comments.

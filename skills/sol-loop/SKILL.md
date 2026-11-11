@@ -121,7 +121,8 @@ or budget ends. Show both sides in 2-3 lines each. The user decides.
 Budget end is not approval.
 
 Do not push during the loop. Push after agreement only if the user asked
-to push, ship, or update the PR. The report below goes to the user.
+to push, ship, or update the PR. Keep the review out of the PR text: no
+sol-loop line, model names or verdict. The report below goes to the user.
 
 Report: rounds, model, what Sol changed, diff size before/after, fixed and
 declined findings with reasons, usage if exposed (else say not), pushed or not.

@@ -48,6 +48,7 @@ A project with a project vault (a `<ws>-vault/` folder in its workspace, or a pr
 Public text is anything people other than the user will read: commit messages, PR descriptions, PR review comments, issue text and comments, release notes, READMEs and docs, and anything posted to a website or social account.
 
 - Before posting or committing public text, load the `unslop` skill and apply it. Preserve technical terms, code, quotations and warranted uncertainty.
+- Never mention Claude, Codex, OMP or AI assistance in public text, and never add Co-Authored-By trailers, unless the user asks for it.
 - Never include secrets, tokens, internal IP addresses or internal hostnames.
 
 ## Review loops (sol-loop, council)
