@@ -1,0 +1,30 @@
+views:
+  - type: table
+    name: Open
+    filters:
+      and:
+        - file.folder != "templates"
+        - type == "pr"
+        - status != "done"
+        - status != "dropped"
+    order:
+      - file.name
+      - repo
+      - pr
+      - status
+      - blocked-on
+      - updated
+  - type: table
+    name: Closed
+    filters:
+      and:
+        - file.folder != "templates"
+        - type == "pr"
+        - or:
+            - status == "done"
+            - status == "dropped"
+    order:
+      - file.name
+      - repo
+      - pr
+      - closed

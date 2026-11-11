@@ -1,0 +1,2 @@
+# Journal blocks are append-only, so a union merge keeps both machines' blocks.
+journal/*.md merge=union

@@ -1,0 +1,35 @@
+views:
+  - type: table
+    name: Open
+    filters:
+      and:
+        - file.folder != "templates"
+        - type == "ticket"
+        - status != "done"
+        - status != "dropped"
+    order:
+      - file.name
+      - project
+      - status
+      - blocked-by
+      - pr
+      - updated
+    sort:
+      - property: project
+        direction: ASC
+      - property: file.name
+        direction: ASC
+  - type: table
+    name: Closed
+    filters:
+      and:
+        - file.folder != "templates"
+        - type == "ticket"
+        - or:
+            - status == "done"
+            - status == "dropped"
+    order:
+      - file.name
+      - project
+      - pr
+      - closed

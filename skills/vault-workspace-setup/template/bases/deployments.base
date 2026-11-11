@@ -1,0 +1,14 @@
+views:
+  - type: table
+    name: Pending
+    filters:
+      and:
+        - file.folder != "templates"
+        - type == "deployment"
+        - status != "done"
+        - status != "dropped"
+    order:
+      - file.name
+      - status
+      - blocked-on
+      - updated

@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/mattpocock/skills",
+  "revision": "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d",
+  "sourceDirectory": "skills/engineering/to-spec",
+  "files": [
+    "SKILL.md",
+    "agents/openai.yaml"
+  ]
+}

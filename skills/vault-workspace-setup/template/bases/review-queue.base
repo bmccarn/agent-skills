@@ -1,0 +1,29 @@
+views:
+  - type: table
+    name: Oldest verified first
+    filters:
+      and:
+        - file.folder != "templates"
+        # Explicit allowlist rather than `type != "daily"`: anything in the vault
+        # without a vault `type` (skills/, stray docs, pasted files) would otherwise
+        # render as a phantom row with no verified date, sorting straight to the top.
+        # TRADE-OFF: an allowlist fails closed. If you invent a new note type, add it
+        # here too — otherwise those notes vanish from the review queue silently,
+        # which looks exactly like "nothing needs re-verifying."
+        # `ticket` is left out on purpose: tickets are plans, not claims to re-verify.
+        - or:
+            - type == "project"
+            - type == "pr"
+            - type == "deployment"
+            - type == "note"
+        - status != "done"
+        - status != "dropped"
+    order:
+      - file.name
+      - type
+      - status
+      - verified
+      - updated
+    sort:
+      - property: verified
+        direction: ASC

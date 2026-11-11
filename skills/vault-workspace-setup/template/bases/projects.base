@@ -1,0 +1,28 @@
+views:
+  - type: table
+    name: Active & blocked
+    filters:
+      and:
+        - file.folder != "templates"
+        - type == "project"
+        - status != "done"
+        - status != "dropped"
+    order:
+      - file.name
+      - status
+      - blocked-on
+      - jira
+      - updated
+  - type: table
+    name: Closed
+    filters:
+      and:
+        - file.folder != "templates"
+        - type == "project"
+        - or:
+            - status == "done"
+            - status == "dropped"
+    order:
+      - file.name
+      - status
+      - closed

@@ -1,0 +1,29 @@
+#!/bin/sh
+# Vault guard: reject Obsidian phantom-tag artifacts before they land.
+# "#246/" (numeric + slash) parses as a VALID nested tag in Obsidian and
+# renders as a misleading clickable tag pill. Bare "#246" is safe (purely
+# numeric tags are invalid). Fenced code blocks, inline code spans, and URLs
+# don't render tags, so all three are STRIPPED before scanning - never exempt
+# whole lines (a line-level exemption fails open when a URL and an artifact
+# share a line). Fenced/blanked lines are replaced with empty lines so grep -n
+# line numbers stay exact. See AGENTS.md "Never write #N/#M for PR pairs."
+#
+# Arm this hook after `git init` or a fresh clone:
+#   git config core.hooksPath .githooks
+bad=$(git diff --cached --name-only --diff-filter=ACM -- '*.md' \
+  | while IFS= read -r f; do
+      git show ":$f" \
+        | awk '/^[[:space:]]*```/{infence=!infence; print ""; next} infence{print ""; next} {print}' \
+        | sed 's/`[^`]*`//g' \
+        | sed -E 's~https?://[^[:space:]<>")]*~~g' \
+        | grep -nE '#[0-9]+/' \
+        | sed "s|^|$f:|"
+    done)
+if [ -n "$bad" ]; then
+  echo "pre-commit: Obsidian phantom-tag pattern '#N/' found outside code spans/URLs:" >&2
+  printf '%s\n' "$bad" >&2
+  echo "Fix: write '#N / #M' (spaced slash), '#N and #M', or link the PR note ([[<repo>-N]])." >&2
+  echo "See AGENTS.md 'Never write #N/#M for PR pairs.'" >&2
+  exit 1
+fi
+exit 0

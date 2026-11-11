@@ -1,0 +1,8 @@
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.DS_Store
+.trash/
+
+# A global gitignore may ignore AGENTS.md repo-wide (agent files kept out of work repos).
+# In this vault AGENTS.md IS content - the vault contract - so re-include it here.
+!AGENTS.md
