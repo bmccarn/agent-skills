@@ -1,0 +1,185 @@
+# OMP settings that the skills in this repo were written against.
+# Copy to ~/.omp/agent/config.yml, or set single keys with `omp config set <key> <value>`.
+# OMP drops comments when it rewrites this file, so keep this copy for the reasons.
+# Rule: every role that can edit files resolves to Claude. GPT Sol and Muse only review.
+# The model IDs need an Anthropic login and an OpenAI Codex login. `judge` uses OpenRouter.
+# Replace any model you cannot reach.
+
+modelRoles:
+  default: anthropic/claude-opus-5-5:high
+  smol: anthropic/claude-sonnet-5-5:high
+  slow: anthropic/claude-opus-5-5:xhigh
+  plan: "@slow"
+  task: anthropic/claude-opus-5-5:high
+  advisor: openai-codex/gpt-6.1-sol:high
+  review: openai-codex/gpt-6.1-sol:high
+  commit: anthropic/claude-sonnet-5-5:medium
+  tiny: anthropic/claude-sonnet-5-5:low
+  memory: anthropic/claude-sonnet-5-5:medium
+  vision: anthropic/claude-opus-5-5:high
+  image: openai-codex/gpt-image-2
+  judge: openrouter/~typesafe/jev-latest:auto
+
+# Presets. A switch writes its roles into config.yml and clears any role the preset leaves out,
+# so every preset lists every role.
+# /modelpreset switch deep: Fable 5.2 on default and slow (plan follows slow).
+# /modelpreset switch daily: back to the roles above. Keep `daily` identical to modelRoles.
+modelPresets:
+  daily:
+    defaultThinkingLevel: high
+    modelRoles:
+      default: anthropic/claude-opus-5-5:high
+      smol: anthropic/claude-sonnet-5-5:high
+      slow: anthropic/claude-opus-5-5:xhigh
+      plan: "@slow"
+      task: anthropic/claude-opus-5-5:high
+      advisor: openai-codex/gpt-6.1-sol:high
+      review: openai-codex/gpt-6.1-sol:high
+      commit: anthropic/claude-sonnet-5-5:medium
+      tiny: anthropic/claude-sonnet-5-5:low
+      memory: anthropic/claude-sonnet-5-5:medium
+      vision: anthropic/claude-opus-5-5:high
+      image: openai-codex/gpt-image-2
+      judge: openrouter/~typesafe/jev-latest:auto
+
+  deep:
+    defaultThinkingLevel: high
+    modelRoles:
+      default: anthropic/claude-fable-5-2:high
+      smol: anthropic/claude-sonnet-5-5:high
+      slow: anthropic/claude-fable-5-2:xhigh
+      plan: "@slow"
+      task: anthropic/claude-opus-5-5:high
+      advisor: openai-codex/gpt-6.1-sol:high
+      review: openai-codex/gpt-6.1-sol:high
+      commit: anthropic/claude-sonnet-5-5:medium
+      tiny: anthropic/claude-sonnet-5-5:low
+      memory: anthropic/claude-sonnet-5-5:medium
+      vision: anthropic/claude-opus-5-5:high
+      image: openai-codex/gpt-image-2
+      judge: openrouter/~typesafe/jev-latest:auto
+
+defaultThinkingLevel: high
+# OMP 18.17.0 made `low` the default, also for Sol. The advisor and the Sol reviewers write full reports.
+textVerbosity: medium
+
+# Default value, pinned on purpose: OMP must not load Claude's or Codex's user-level skills,
+# plugins or context files. Install the skills in ~/.agents/skills, which OMP reads natively.
+enabledProviders: []
+
+retry:
+  # A transient server error retries on the same model; only a usage limit switches to the chain.
+  fallbackOn: usage-limit
+  # Prefer a healthy second account on the same provider before any model fallback.
+  usageAwareFallback: true
+  usageReservePct: 10
+  usageReservePolicy: confirm
+  fallbackChains:
+    # Editing roles fall back within Claude only; Sol never takes over a coding session.
+    default:
+      - anthropic/claude-sonnet-5-5:xhigh
+    task:
+      - anthropic/claude-sonnet-5-5:xhigh
+    slow:
+      - anthropic/claude-sonnet-5-5:xhigh
+    smol:
+      - anthropic/claude-opus-5-5:medium
+    # The deep preset puts Fable on default and slow: fall to Opus first, then Sonnet.
+    anthropic/claude-fable-5-2:
+      - anthropic/claude-opus-5-5
+      - anthropic/claude-sonnet-5-5:xhigh
+    # Reviewers: no substitution. sol-loop and council forbid swapping the reviewer's
+    # model, and exact-model keys beat role chains, so these also cover advisor/review.
+    openai-codex/gpt-6.1-sol: []
+    muse-code/muse-wonder-full-1.0: []
+
+providers:
+  anthropic:
+    slowMode: auto
+
+advisor:
+  enabled: true
+  syncBacklog: "3"
+
+# Service tier per model family: Sol (OpenAI) runs in fast mode, Opus (Anthropic) does not.
+# The advisor is Sol and reviews every turn. Subagents follow task.agentServiceTierOverrides.
+tier:
+  openai: priority
+  anthropic: none
+  advisor: priority
+
+task:
+  showResolvedModelBadge: true
+  enableLsp: true
+  isolation:
+    enabled: true
+  agentModelOverrides:
+    task: "@task"
+    sonic: "@smol"
+    scout: "@smol"
+    reviewer: "@review"
+    security-reviewer: openai-codex/gpt-6.1-sol:xhigh
+  # Fast mode (priority tier) for every agent that runs on Sol, so review loops finish sooner.
+  # Opus agents keep the normal tier. Keep in step with the Sol models above.
+  agentServiceTierOverrides:
+    sol: priority
+    slice-reviewer: priority
+    reviewer: priority
+    security-reviewer: priority
+  agentAdvisor:
+    task: "on"
+    slice-implementer: "on"
+
+lsp:
+  enabled: true
+  diagnosticsOnWrite: true
+  diagnosticsOnEdit: true
+  formatOnWrite: false
+
+prewalk:
+  enabled: false
+
+# Reviewers (sol, muse, slice-reviewer) run bash in the shared checkout. Refuse git commands
+# that discard or move the working tree: stash, reset --hard, branch switch, path restore.
+bash:
+  gitGuard: true
+
+memory:
+  backend: mnemopi
+mnemopi:
+  scoping: per-project-tagged
+  polyphonicRecall: true
+  enhancedRecall: true
+  proactiveLinking: true
+autolearn:
+  enabled: true
+
+features:
+  unexpectedStopDetection: smart
+branchSummary:
+  enabled: true
+compaction:
+  handoffSaveToDisk: true
+checkpoint:
+  enabled: true
+github:
+  enabled: true
+secrets:
+  enabled: true
+codexResets:
+  autoRedeem: "no"
+marketplace:
+  autoUpdate: auto
+update:
+  auto: true
+dev:
+  autoqa: false
+
+theme:
+  dark: graphite
+symbolPreset: nerd
+statusLine:
+  preset: full
+  separator: none
+composer:
+  shape: band

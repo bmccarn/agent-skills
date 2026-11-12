@@ -1,0 +1,101 @@
+{
+  "servers": {
+    "typescript-native": {
+      "rootMarkers": [
+        "package.json",
+        "tsconfig.json",
+        "jsconfig.json",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ]
+    },
+    "typescript-language-server": {
+      "rootMarkers": [
+        "package.json",
+        "tsconfig.json",
+        "jsconfig.json",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ]
+    },
+    "vscode-json-language-server": {
+      "rootMarkers": [
+        "package.json",
+        ".git",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ]
+    },
+    "yamlls": {
+      "rootMarkers": [
+        ".git",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ]
+    },
+    "bashls": {
+      "rootMarkers": [
+        ".git",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ]
+    },
+    "marksman": {
+      "rootMarkers": [
+        ".marksman.toml",
+        ".git",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ]
+    },
+    "pyright": {
+      "rootMarkers": [
+        "pyproject.toml",
+        "pyrightconfig.json",
+        "setup.py",
+        "setup.cfg",
+        "requirements.txt",
+        "Pipfile",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ]
+    },
+    "terraformls": {
+      "rootMarkers": [
+        ".terraform",
+        "terraform.tfstate",
+        "*.tf",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ]
+    },
+    "gopls": {
+      "rootMarkers": [
+        "go.mod",
+        "go.work",
+        "go.sum",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ]
+    },
+    "helm-ls": {
+      "rootMarkers": [
+        "Chart.yaml",
+        "Chart.yml",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ]
+    },
+    "dockerls": {
+      "rootMarkers": [
+        "Dockerfile",
+        "docker-compose.yml",
+        "docker-compose.yaml",
+        ".dockerignore",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ]
+    }
+  },
+  "idleTimeoutMs": 600000
+}

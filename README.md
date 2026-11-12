@@ -1,8 +1,13 @@
 # Agent skills
 
-Sixteen skills for coding agents (Claude Code, Codex, OMP), and the project vault template that three of them read and write. In the skill text, "the user" is the person who runs the agent.
+Sixteen skills for coding agents (Claude Code, Codex, OMP), the project vault template that three of them read and write, and the OMP configuration they were written against. In the skill text, "the user" is the person who runs the agent.
 
 A skill is a folder with a `SKILL.md` file. The agent always sees the description at the top of that file. It reads the rest when the description matches your request.
+
+To copy the whole setup, read two pages:
+
+- [docs/how-it-works.md](docs/how-it-works.md) explains each part and why it is there: the skills, the global instructions, the OMP agents and rules, and the project vault.
+- [docs/omp-setup.md](docs/omp-setup.md) installs everything in OMP, and explains each setting.
 
 ## Install the skills
 
@@ -65,7 +70,7 @@ The blank vault is in `skills/vault-workspace-setup/template/`. The `vault-works
 
 - From Claude Code, the skills run `codex exec -s read-only`. Install the Codex CLI and sign in.
 - From Codex, the skills run `claude -p --model opus`. Install Claude Code and sign in.
-- From OMP, the skills call an agent named `sol`. `vet` also calls `ponytail-reviewer`, and `council` calls `muse`. The definitions that these skills were written against are in `extras/omp-agents/`. Copy them to `~/.omp/agent/agents/` and change the `model:` lines to models you have.
+- From OMP, the skills call an agent named `sol`. `vet` also calls `ponytail-reviewer`, and `council` calls `muse`. The definitions are in `extras/omp/agents/`, with the rest of the OMP configuration. [docs/omp-setup.md](docs/omp-setup.md) installs them.
 
 A skill that cannot reach the second model says so in its report. It does not substitute another model.
 
@@ -82,7 +87,7 @@ A skill that cannot reach the second model says so in its report. It does not su
 
 `tee-up` and `scope` cite sections of a global instruction file by name: "Changing code", "Done means proven", "Git", "Public text" and "Cloud operations". `extras/AGENTS.md` is that file.
 
-Copy the sections you want into `~/.claude/CLAUDE.md` for Claude Code, or `~/.codex/AGENTS.md` for Codex. The skills run without them, but then nothing defines the rules they cite. The file holds one person's working rules, so read it before you adopt it.
+Copy the sections you want into `~/.claude/CLAUDE.md` for Claude Code, `~/.codex/AGENTS.md` for Codex, or `~/.omp/agent/AGENTS.md` for OMP. The skills run without them, but then nothing defines the rules they cite. The file holds one person's working rules, so read it before you adopt it.
 
 ### Settings for the vault skills
 
